@@ -1,0 +1,93 @@
+#
+# A release branch requires updating the following six variables at the bottom of this file:
+#
+# IOS_PACKAGE_VERSION (major/minor/revision #)
+# MAC_PACKAGE_VERSION (major/minor/revision #)
+#
+# IOS_NUGET_VERSION (major/minor/patch #)
+# TVOS_NUGET_VERSION (major/minor/patch #)
+# WATCHOS_NUGET_VERSION (major/minor/patch #)
+# MACOS_NUGET_VERSION (major/minor/patch #)
+#
+# Update version numbers on main as well, to the next version
+#
+
+#
+# ** Version numbers **
+#
+# Versions are defined as: Major.Minor.Revison.Build
+#
+# Major/minor (first/second numbers - max 2 digits each):
+# - Bump for major/minor releases.
+#
+# Revision (third number - max 2 digits):
+# - Reset to 0 after a major or minor bump (do not use 99 for Xcode preview
+#   branches (use 0 instead), because otherwise we can't bump it further if
+#   needed).
+# - Bump for service releases and previews.
+# - Bump if commit distance becomes > 999.
+# - Can also be bumped for other reasons (in particular there's no correlation
+#   between Preview/Service Release #X and Revision #Y).
+#   - Bumping revision to a high enough number to make it clear that there's
+#     no correlation is a valid reason to bump.
+# - The revision must be bumped at the same time for both iOS and Mac
+#   (otherwise the commit distance will differ).
+# - Also bump if the [IOS|MAC]_PACKAGE_VERSION lines change for any other
+#   reason (otherwise we end up with repeating version numbers, since the
+#   commit distance would restart at 0, while the other numbers wouldn't
+#   change).
+# - Any other problem can also usually be solved by bumping the revision.
+# - Do not refactor the revision to a separate variable, because the reason
+#   bumping the revision is a general solution for many problems is that it
+#   also resets the commit distance (which wouldn't happen if the revision was
+#   refactored to a separate variable).
+#
+# Build (fourth number - max 3 digits):
+# - Automatically calculated as the number of commits since the last time any
+#   of the other three numbers changed (technically since the corresponding
+#   line changed in git).
+#
+
+IOS_PACKAGE_VERSION=16.5.0.$(IOS_COMMIT_DISTANCE)
+MAC_PACKAGE_VERSION=9.4.0.$(MAC_COMMIT_DISTANCE)
+
+#
+# ** NuGet package version numbers **
+#
+# See dotnet/VERSIONS.md.
+#
+# Rules:
+# * The first two numbers represent the major and minor version of the corresponding OS.
+# * A third number will be added later (the commit distance).
+#
+# IMPORTANT: There must be *no* managed API differences unless the two first
+# numbers (major.minor) changes.
+
+# WARNING: Do **not** use versions higher than the available Xcode SDK or else we will have issues with mtouch (See https://github.com/xamarin/xamarin-macios/issues/7705)
+
+IOS_NUGET_OS_VERSION=16.4
+TVOS_NUGET_OS_VERSION=16.4
+WATCHOS_NUGET_OS_VERSION=9.4
+MACOS_NUGET_OS_VERSION=13.3
+MACCATALYST_NUGET_OS_VERSION=16.4
+
+
+# Defines the default platform version if it's not specified in the TFM. The default should not change for a given .NET version:
+# * We release support for iOS 14.5 with .NET 6
+# * Apple releases iOS 15.0, we're still using .NET 6. This default continues to be iOS 14.5
+# * .NET 7 is shipped, and at this point we bump the default to iOS 15.0
+# Basically: this should be the last OS version of the platform in question when the current major .NET version is first released to stable.
+# Ref: https://github.com/dotnet/designs/blob/8e6394406d44f75f30ea2259a425cb9e38d75b69/accepted/2020/net5/net5.md#os-versions
+
+DEFAULT_TARGET_PLATFORM_VERSION_IOS=16.1
+DEFAULT_TARGET_PLATFORM_VERSION_TVOS=16.1
+DEFAULT_TARGET_PLATFORM_VERSION_WATCHOS=9.1
+DEFAULT_TARGET_PLATFORM_VERSION_MACOS=13.0
+DEFAULT_TARGET_PLATFORM_VERSION_MACCATALYST=16.1
+
+# These variables must be updated whenever we release a new stable version into .NET 6
+NET6_IOS_NUGET_VERSION_NO_METADATA=16.4.42
+NET6_TVOS_NUGET_VERSION_NO_METADATA=16.4.42
+NET6_WATCHOS_NUGET_VERSION_NO_METADATA=8.5.447
+NET6_MACOS_NUGET_VERSION_NO_METADATA=13.3.42
+NET6_MACCATALYST_NUGET_VERSION_NO_METADATA=16.4.42

@@ -1,0 +1,7 @@
+test-results
+TestResult.xml
+index.html
+.failed-stamp
+test.config
+*.csproj.inc
+

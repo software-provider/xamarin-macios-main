@@ -1,0 +1,15 @@
+product.h
+.libs
+delegates.inc
+Delegates.generated.cs
+delegates.h
+mono-runtime.m
+xamarin/mono-runtime.h
+xamarin/runtime-generated.h
+app-main.m
+watchextension-main.m
+tvextension-main.m
+bindings-generated.m
+*.dylib
+*.o
+coreclrhost.h

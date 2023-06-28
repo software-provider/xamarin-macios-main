@@ -1,0 +1,65 @@
+// vim: set filetype=c :
+//
+// delegates.m:
+//
+// Authors:
+//   Rolf Bjarne Kvinge <rolf@xamarin.com>
+//
+// Copyright 2013-2014 Xamarin Inc.
+//
+<#@ include file="delegates.t4" #>
+
+/*
+ * This file was generated from delegates.inc.t4, any modifications will be lost once this file is re-generated.
+ */
+
+#include "delegates.h"
+
+<# foreach (var d in delegates) { #>
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#if DOTNET\n");
+#>
+typedef <#= d.ReturnType.InterfaceCType #><#= d.AlignCReturnType #> (*func_<#= d.EntryPoint #>)<#= d.AlignEntryPoint #> (<#= d.CArgumentSignature #>);
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#endif // DOTNET\n");
+#>
+<# } #>
+
+struct Delegates {
+<# foreach (var d in delegates) { #>
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#if DOTNET\n");
+#>
+	func_<#= d.EntryPoint #><#= d.AlignEntryPoint #> <#= d.SimpleEntryPoint #>;
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#endif // DOTNET\n");
+#>
+<# } #>
+};
+
+static struct Delegates delegates = { 0 };
+
+static GCHandle
+create_linked_away_exception (const char *func)
+{
+	char *msg = xamarin_strdup_printf ("The runtime function %s has been linked away.", func);
+	GCHandle gchandle = xamarin_create_product_exception (8028, msg);
+	xamarin_free (msg);
+	return gchandle;
+}
+
+<# foreach (var d in delegates) { #>
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#if defined (CORECLR_RUNTIME)\n");
+#>
+<#= d.Function #>
+<#
+		if (d.OnlyCoreCLR)
+			Write ("#endif // CORECLR_RUNTIME\n");
+#>
+<# } #>

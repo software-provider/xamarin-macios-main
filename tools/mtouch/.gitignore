@@ -1,0 +1,12 @@
+Constants.cs
+*.a
+*.dylib
+*.dSYM
+*.registrar.*.m
+*.registrar.*.h
+simlauncher-sgen
+simlauncher32-sgen
+simlauncher64-sgen
+*.stamp
+mtouch.csproj.inc
+*.frameworks

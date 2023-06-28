@@ -1,0 +1,12 @@
+*.a
+*.o
+.libs
+libtest-ar.m
+libtest-object.m
+libtest.structs.h
+libtest.properties.h
+libtest.decompile.m
+libtest.methods.h
+libtest.methods.m
+*.generated.cs
+
